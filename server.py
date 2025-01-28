@@ -2,6 +2,7 @@ import io
 import uuid
 import queue
 import threading
+import sys
 
 from flask import Flask, request, jsonify
 from ultralytics import YOLO
@@ -213,7 +214,11 @@ def main():
     global model
 
     # Load YOLO (your choice of weights)
-    model = YOLO("yolo11n.pt")
+    # use argv to pass the path to the weights file
+    # or "yolo11m.pt" if no argument is provided
+
+    weights_file  = "yolo11m.pt" if len(sys.argv) < 2 else sys.argv[1]
+    model = YOLO(weights_file)
 
     # Start worker
     t = threading.Thread(target=worker_thread, daemon=True)
