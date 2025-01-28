@@ -1,0 +1,33 @@
+name: Build & Push Docker Image to GHCR
+
+on:
+  push:
+    branches: [ "main" ]  # Adjust as needed
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # 1) Check out the repo
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # 2) Log in to GHCR 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          # Use GITHUB_TOKEN to authenticate (works well for public repositories).
+          # For private repos or advanced needs, use a PAT with write/read:packages scopes.
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3) Build & Push
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          # tags: ghcr.io/<owner>/<image-name>:<tag>
+          # For example:
+          tags: ghcr.io/${{ github.repository_owner }}/yolo_flask_service:latest
