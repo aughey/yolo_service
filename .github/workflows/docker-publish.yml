@@ -1,5 +1,7 @@
 name: Build & Push Docker Image to GHCR
 
+permissions: write-all
+
 on:
   push:
     branches: [ "main" ]  # Adjust as needed
