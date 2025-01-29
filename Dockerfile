@@ -14,4 +14,4 @@ COPY server.py .
 EXPOSE 5000
 
 # Start the Flask service
-CMD ["python", "server.py"]
+ENTRYPOINT ["python", "server.py"]
