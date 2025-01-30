@@ -17,7 +17,7 @@ ghcr.io/aughey/yolo_flask_service:latest
 To run the service as a Docker container:
 
 ```bash
-docker run -p 5000:5000 ghcr.io/aughey/yolo_flask_service:latest
+docker run --rm -it -p 5000:5000 ghcr.io/aughey/yolo_flask_service:latest
 ```
 
 This will start the Flask service on port `5000`. You can then make requests to the various endpoints (described below).
