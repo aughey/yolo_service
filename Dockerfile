@@ -9,6 +9,7 @@ WORKDIR /app
 
 # Copy your Python script (the YOLO Flask service) into the container
 COPY server.py .
+COPY videoprocessor.py .
 
 # Expose the port Flask will run on (default 5000)
 EXPOSE 5000
