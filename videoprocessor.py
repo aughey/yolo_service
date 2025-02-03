@@ -183,6 +183,7 @@ def main():
     )
     parser.add_argument("--video", type=str, required=True, help="Path to input video")
     parser.add_argument("--output", type=str, required=True, help="Path to output JSON")
+    parser.add_argument("--weights", type=str, required=True, help="Weights File")
     parser.add_argument("--max_frames", type=int, default=None,
                         help="Optional limit on number of frames to process")
     parser.add_argument("--queue_size", type=int, default=10,
@@ -200,7 +201,7 @@ def main():
 
     # 3) Load YOLO model
     print("Loading YOLO model...")
-    model = YOLO("yolo11n.pt")  # or your custom weights
+    model = YOLO(args.weights)  # or your custom weights
     print("Model loaded.")
 
     # 4) Spawn 3 threads:
