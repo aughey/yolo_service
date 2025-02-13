@@ -6,7 +6,7 @@ import threading
 from ultralytics import YOLO
 
 
-def read_frames_thread(video_path, detection_queue, max_frames, stop_signal):
+def read_frames_thread(video_path, detection_queue, max_frames, skip_frames, stop_signal):
     """
     Reads frames from 'video_path'. For each frame:
       1) Split into left_img, right_img if width > height (forming two squares).
@@ -32,6 +32,10 @@ def read_frames_thread(video_path, detection_queue, max_frames, stop_signal):
         # If a max_frames limit is set, we can stop after that many
         if max_frames is not None and frame_id >= max_frames:
             break
+        
+        if frame_id % skip_frames != 0:
+            frame_id += 1
+            continue
 
         H, W, _ = frame.shape
         if W <= H:
@@ -186,6 +190,8 @@ def main():
     parser.add_argument("--weights", type=str, required=True, help="Weights File")
     parser.add_argument("--max_frames", type=int, default=None,
                         help="Optional limit on number of frames to process")
+    parser.add_argument("--skip_frames", type=int, default=1,
+                        help="Optional number of frames to skip.  For 30fps, a skip of 10 will process every 10 frames")
     parser.add_argument("--queue_size", type=int, default=10,
                         help="Max queue size for detection pipeline to keep YOLO hot")
     args = parser.parse_args()
@@ -210,7 +216,7 @@ def main():
     #    - Thread C: aggregator -> writes JSON
     t_reader = threading.Thread(
         target=read_frames_thread,
-        args=(args.video, detection_queue, args.max_frames, stop_signal),
+        args=(args.video, detection_queue, args.max_frames, args.skip_frames, stop_signal),
         daemon=True
     )
     t_detector = threading.Thread(
