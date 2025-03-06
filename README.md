@@ -22,6 +22,12 @@ docker run --rm -it -p 5000:5000 ghcr.io/aughey/yolo_flask_service:latest
 
 This will start the Flask service on port `5000`. You can then make requests to the various endpoints (described below).
 
+### Running the video processor
+
+```bash
+docker run --rm -it --entrypoint python -v /c/folder:/folder ghcr.io/aughey/yolo_flask_service:latest videoprocessor.py --video /folder/video.mov --output /folder/video_skip10.json --weights yolo12m.pt --skip_frames 10
+```
+
 ---
 
 ## Endpoints
